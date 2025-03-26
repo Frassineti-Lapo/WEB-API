@@ -5,6 +5,12 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 class AlunniController
 {
   public function index(Request $request, Response $response, $args){
+    $queryParams = $request -> getQueryParams();
+
+    $search = $queryParams ['search'] ?? null;
+    $sortCol = $queryParams ['sortCol'] ?? null;
+    $sort = $queryParams ['sort'] ?? null;
+
     $mysqli_connection = new MySQLi('my_mariadb', 'root', 'ciccio', 'scuola');
     $result = $mysqli_connection->query("SELECT * FROM alunni");
     $results = $result->fetch_all(MYSQLI_ASSOC);
@@ -47,4 +53,5 @@ class AlunniController
     $mysqli_connection->query("DELETE FROM alunni WHERE id='$id';") or die ('Unable to execute query. '. mysqli_error($query));
     return $response->withStatus(204);
   }
+  
 }
